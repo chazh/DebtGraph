@@ -1,0 +1,6 @@
+<div
+    [ngClass]="{'app-light-theme': (isLightTheme | async) === true, 'app-dark-theme': (isLightTheme | async) !== true}">
+    <div class="mat-typography mat-app-background">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+@use '@angular/material' as mat;
+@use './variables' as var;
+
+// Include non-theme styles for core.
+@include mat.core();
+
+// Define a dark theme.
+$palette-primary-dark: mat.define-palette(mat.$pink-palette, 700, 500, 900);
+$palette-accent-dark: mat.define-palette(mat.$blue-grey-palette, A200, A100, A400);
+$palette-warn-dark: mat.define-palette(mat.$red-palette);
+
+$theme-dark: mat.define-dark-theme((
+    color: (primary: $palette-primary-dark, accent: $palette-accent-dark, warn: $palette-warn-dark),
+    typography: mat.define-typography-config(),
+    density: 0
+));
+
+// Define a light theme.
+$palette-primary-light: mat.define-palette(mat.$deep-purple-palette);
+$palette-accent-light: mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$palette-warn-light: mat.define-palette(mat.$red-palette);
+
+$theme-light: mat.define-light-theme((
+    color: (primary: $palette-primary-light, accent: $palette-accent-light, warn: $palette-warn-light),
+    typography: mat.define-typography-config(),
+    density: 0
+));
+
+@include mat.all-component-themes($theme-dark);
+@include mat.typography-hierarchy($theme-dark);
+
+.app-dark-theme {
+    $primary: mat.get-color-from-palette($palette-primary-dark, 500);
+    $primary-contrast: mat.get-color-from-palette($palette-primary-dark, '500-contrast');
+
+    $primary-darker: mat.get-color-from-palette($palette-primary-dark, 'darker');
+    $primary-darker-contrast: mat.get-color-from-palette($palette-primary-dark, 'darker-contrast');
+
+    $accent: mat.get-color-from-palette($palette-accent-dark, 500);
+    $accent-contrast: mat.get-color-from-palette($palette-accent-dark, '500-contrast');
+
+    $warn: mat.get-color-from-palette($palette-warn-dark, 500);
+    $warn-contrast: mat.get-color-from-palette($palette-warn-dark, '500-contrast');
+
+    --primary: #{$primary};
+    --primary-contrast: #{$primary-contrast};
+
+    --primary-darker: #{$primary-darker};
+    --primary-darker-contrast: #{$primary-darker-contrast};
+
+    --accent: #{$accent};
+    --accent-contrast: #{$accent-contrast};
+
+    --warn: #{$warn};
+    --warn-contrast: #{$warn-contrast};
+}
+
+.app-light-theme {
+    @include mat.all-component-themes($theme-light);
+    @include mat.typography-hierarchy($theme-light);
+
+    $primary: mat.get-color-from-palette($palette-primary-light, 500);
+    $primary-contrast: mat.get-color-from-palette($palette-primary-light, '500-contrast');
+
+    $primary-darker: mat.get-color-from-palette($palette-primary-light, 'darker');
+    $primary-darker-contrast: mat.get-color-from-palette($palette-primary-light, 'darker-contrast');
+
+    $accent: mat.get-color-from-palette($palette-accent-light, 500);
+    $accent-contrast: mat.get-color-from-palette($palette-accent-light, '500-contrast');
+
+    $warn: mat.get-color-from-palette($palette-warn-light, 500);
+    $warn-contrast: mat.get-color-from-palette($palette-warn-light, '500-contrast');
+
+    --primary: #{$primary};
+    --primary-contrast: #{$primary-contrast};
+
+    --primary-darker: #{$primary-darker};
+    --primary-darker-contrast: #{$primary-darker-contrast};
+
+    --accent: #{$accent};
+    --accent-contrast: #{$accent-contrast};
+
+    --warn: #{$warn};
+    --warn-contrast: #{$warn-contrast};
+}

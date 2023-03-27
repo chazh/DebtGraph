@@ -1,0 +1,34 @@
+{
+	"debt": [
+		{
+			"name": "Loan A",
+			"balance": 1500,
+			"payment": 100,
+			"interestRate": 3.3,
+			"type": "Credit Card",
+			"hold": false,
+			"holdUntil": "",
+			"notes": ""
+		},
+		{
+			"name": "Loan B",
+			"balance": 6000,
+			"payment": 85,
+			"interestRate": 5,
+			"type": "Credit Card",
+			"hold": false,
+			"holdUntil": "",
+			"notes": ""
+		},
+		{
+			"name": "Loan C",
+			"balance": 15000,
+			"payment": 130,
+			"interestRate": 4,
+			"type": "Credit Card",
+			"hold": false,
+			"holdUntil": "",
+			"notes": ""
+		}
+	]
+}

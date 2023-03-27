@@ -1,0 +1,90 @@
+<form [formGroup]="dataForm">
+    <div class="formContainer">
+        <div class="formItem">
+            <mat-form-field>
+                <mat-label>Extra Payment Amount</mat-label>
+                <span matPrefix>&nbsp;$&nbsp;</span>
+                <input matInput placeholder="3000" #input formControlName="extraPaymentAmount">
+            </mat-form-field>
+        </div>
+        <div class="formItem">
+            <mat-button-toggle-group formControlName="includeHolds" aria-label="Include Holds">
+                <mat-button-toggle value="true">Yes</mat-button-toggle>
+                <mat-button-toggle value="false">No</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+    <div class="container">
+        <button mat-raised-button (click)="recalculate()" color="primary">Recalculate</button>
+    </div>
+
+    <div class="container dataContainer">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Default</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <div>
+                        <div>Number of Payments: {{defaultGraphData.numberOfPayments}}</div>
+                        <div>Interest Paid: {{defaultGraphData.interestPaid | currency}}</div>
+                        <div>Payoff Date: {{defaultGraphData.payoffDate| date: 'shortDate'}}</div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Snowball</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <div>
+                        <div>Number of Payments: {{snowballGraphData.numberOfPayments}}</div>
+                        <div>Interest Paid: {{snowballGraphData.interestPaid | currency}}</div>
+                        <div>Payoff Date: {{snowballGraphData.payoffDate| date: 'shortDate'}}</div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Avalance</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div>
+                    <div>
+                        <div>Number of Payments: {{avalanceGraphData.numberOfPayments}}</div>
+                        <div>Interest Paid: {{avalanceGraphData.interestPaid | currency}}</div>
+                        <div>Payoff Date: {{avalanceGraphData.payoffDate| date: 'shortDate'}}</div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="container">
+        <div>
+            <mat-button-toggle-group formControlName="graphStyle" aria-label="Graph Style">
+                <mat-button-toggle value="Default">Default</mat-button-toggle>
+                <mat-button-toggle value="Snowball">Balance</mat-button-toggle>
+                <mat-button-toggle value="Avalance">Interest Rates</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <svg class="container" id="chart" height="100%" width="100%" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none">
+            <path *ngIf="isAvalanceGraph" [attr.d]="avalanceGraphData.fillPath"
+                [attr.fill]="avalanceGraphData.fillColor" />
+            <path [attr.d]="avalanceGraphData.linePath" fill="none" [attr.stroke]="avalanceGraphData.lineColor"
+                [attr.stroke-width]="avalanceGraphData.lineStroke" />
+            <path *ngIf="isDefaultGraph" [attr.d]="defaultGraphData.fillPath"
+                [attr.fill]="defaultGraphData.fillColor" />
+            <path [attr.d]="defaultGraphData.linePath" fill="none" [attr.stroke]="defaultGraphData.lineColor"
+                [attr.stroke-width]="defaultGraphData.lineStroke" />
+            <path *ngIf="isSnowballGraph" [attr.d]="snowballGraphData.fillPath"
+                [attr.fill]="snowballGraphData.fillColor" />
+            <path [attr.d]="snowballGraphData.linePath" fill="none" [attr.stroke]="snowballGraphData.lineColor"
+                [attr.stroke-width]="snowballGraphData.lineStroke" />
+        </svg>
+    </div>
+</form>

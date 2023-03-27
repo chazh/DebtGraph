@@ -1,0 +1,15 @@
+.filterContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.debtItemContainer {
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
+    flex-basis: 33%;
+}
+
+.debtItem {
+    margin: 1em;
+}

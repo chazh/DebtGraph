@@ -1,0 +1,14 @@
+<mat-card>
+    <mat-card-header>
+        <mat-icon *ngIf="debtItem.hold" mat-card-avatar style="font-size: 2.5rem">money_off</mat-icon>
+        <mat-card-title>{{debtItem.name}}</mat-card-title>
+        <mat-card-subtitle>{{debtItem.type}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div>Balance: {{debtItem.balance | currency}}</div>
+        <div>Payment: {{debtItem.payment| currency}}</div>
+        <div>Interest Rate: {{debtItem.interestRate}}%</div>
+        <div *ngIf="debtItem.hold">Hold Until: {{debtItem.holdUntil}}</div>
+        <div *ngIf="debtItem.notes">Notes: {{debtItem.notes}}</div>
+    </mat-card-content>
+</mat-card>
