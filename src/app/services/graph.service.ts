@@ -7,7 +7,7 @@ import { GraphData } from '../models/GraphData';
 })
 export class GraphService {
   public buildAvalanceGraph(debtItems: DebtInfo[], includeHoldBalances: boolean, extraPaymentAmount: number): GraphData {
-    const graphData = this.buildGraphData(debtItems, 'avalance', includeHoldBalances, extraPaymentAmount);
+    const graphData = this.buildPaymentData(debtItems, 'avalance', includeHoldBalances, extraPaymentAmount);
 
     graphData.fillColor = "#005500";
     graphData.lineColor = "#00ff00";
@@ -16,7 +16,7 @@ export class GraphService {
   }
 
   public buildDefaultGraph(debtItems: DebtInfo[], includeHoldBalances: boolean, extraPaymentAmount: number): GraphData {
-    const graphData = this.buildGraphData(debtItems, 'default', includeHoldBalances, extraPaymentAmount);
+    const graphData = this.buildPaymentData(debtItems, 'default', includeHoldBalances, extraPaymentAmount);
 
     graphData.fillColor = "#550000";
     graphData.lineColor = "#ff0000";
@@ -25,7 +25,7 @@ export class GraphService {
   }
 
   public buildSnowballGraph(debtItems: DebtInfo[], includeHoldBalances: boolean, extraPaymentAmount: number): GraphData {
-    const graphData = this.buildGraphData(debtItems, 'snowball', includeHoldBalances, extraPaymentAmount);
+    const graphData = this.buildPaymentData(debtItems, 'snowball', includeHoldBalances, extraPaymentAmount);
 
     graphData.fillColor = "#000055";
     graphData.lineColor = "#0000ff";
@@ -33,10 +33,37 @@ export class GraphService {
     return graphData;
   }
 
-  private buildGraphData(debtItems: DebtInfo[], graphType: string, includeHoldBalances: boolean, startingExtraPaymentAmount: number): GraphData {
+  public buildGraphData(graphData: GraphData, totalBalance: number, minX: number, maxX: number, minY: number, maxY: number): GraphData {
     const maxWidth = 1000;
     const maxHeight = 500;
 
+    const OldRangeX = (maxX - minX) == 0 ? minX : (maxX - minX);
+    const OldRangeY = (maxY - minY) == 0 ? minY : (maxY - minY);
+
+    let linePath = "";
+
+    let valueX = 0;
+    let valueY = 0.0;
+
+    graphData.balances.forEach((b, i) => {
+      valueX = (((i - minX) * maxWidth) / OldRangeX);
+      valueY = maxHeight - (((b - minY) * maxHeight) / OldRangeY);
+
+      if (b === totalBalance) {
+        linePath = `M ${valueX},${valueY} `;
+      }
+      else {
+        linePath += `L ${valueX},${valueY} `;
+      }
+    })
+
+    graphData.linePath = linePath;
+    graphData.fillPath = `${linePath},L ${maxWidth} ${maxHeight},L 0 ${maxHeight}Z`;
+
+    return graphData;
+  }
+
+  private buildPaymentData(debtItems: DebtInfo[], graphType: string, includeHoldBalances: boolean, startingExtraPaymentAmount: number): GraphData {
     let totalInterestPaid = 0;
     let totalNumberOfPayments = 0;
     let totalBalance = 0;
@@ -58,7 +85,17 @@ export class GraphService {
     }
 
     else if (graphType === 'snowball') {
-      items = items.sort((a, b) => (a.balance - b.balance))
+      items = items.sort((a, b) => {
+        if (a.balance > b.balance) {
+          return 1;
+        }
+
+        if (a.balance < b.balance) {
+          return -1;
+        }
+
+        return 0;
+      });
     }
     else if (graphType === 'avalance') {
       items = items.sort((a, b) => {
@@ -71,14 +108,12 @@ export class GraphService {
         }
 
         return 0;
-      })
+      });
     }
 
     items.forEach(x => {
       totalBalance += x.balance;
     });
-
-    const startingBalance = totalBalance;
 
     balances.push(totalBalance);
 
@@ -131,37 +166,9 @@ export class GraphService {
       lineStroke: "4px",
       interestPaid: totalInterestPaid,
       numberOfPayments: totalNumberOfPayments,
-      payoffDate: estimatedPayoffDate
+      payoffDate: estimatedPayoffDate,
+      balances: balances
     };
-
-    const minXValue = 0;
-    const maxXValue = (balances.length - 1);
-
-    const minYValue = Math.min(...balances);
-    const maxYValue = Math.max(...balances);
-
-    const OldRangeX = (maxXValue - minXValue) == 0 ? minXValue : (maxXValue - minXValue);
-    const OldRangeY = (maxYValue - minYValue) == 0 ? minYValue : (maxYValue - minYValue);
-
-    let linePath = "";
-
-    let valueX = 0;
-    let valueY = 0.0;
-
-    balances.forEach((b, i) => {
-      valueX = (((i - minXValue) * maxWidth) / OldRangeX);
-      valueY = maxHeight - (((b - minYValue) * maxHeight) / OldRangeY);
-
-      if (b === startingBalance) {
-        linePath = `M ${valueX},${valueY} `;
-      }
-      else {
-        linePath += `L ${valueX},${valueY} `;
-      }
-    })
-
-    graphData.linePath = linePath;
-    graphData.fillPath = `${linePath},L ${maxWidth} ${maxHeight},L 0 ${maxHeight}Z`;
 
     return graphData;
   }

@@ -8,4 +8,5 @@ export interface GraphData {
     lineStroke: string;
     numberOfPayments: number;
     payoffDate: Date;
+    balances: number[];
 }

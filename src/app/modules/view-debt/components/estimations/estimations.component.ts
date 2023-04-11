@@ -55,5 +55,27 @@ export class EstimationsComponent implements OnInit {
     this.defaultGraphData = this.graphService.buildDefaultGraph(this.debtItems, false, extraPaymentValue);
     this.snowballGraphData = this.graphService.buildSnowballGraph(this.debtItems, includeHoldsValue, extraPaymentValue);
     this.avalanceGraphData = this.graphService.buildAvalanceGraph(this.debtItems, includeHoldsValue, extraPaymentValue);
+
+    const defaultGraphMaxX = (this.defaultGraphData.balances.length - 1);
+    const snowballGraphMaxX = (this.snowballGraphData.balances.length - 1);
+    const avalanceGraphMaxX = (this.avalanceGraphData.balances.length - 1);
+
+    const defaultGraphMinY = Math.min(...this.defaultGraphData.balances);
+    const snowballGraphMinY = Math.min(...this.snowballGraphData.balances);
+    const avalanceGraphMinY = Math.min(...this.avalanceGraphData.balances);
+
+    const defaultGraphMaxY = Math.max(...this.defaultGraphData.balances);
+    const snowballGraphMaxY = Math.max(...this.snowballGraphData.balances);
+    const avalanceGraphMaxY = Math.max(...this.avalanceGraphData.balances);
+
+    const minXValue = 0;
+    const maxXValue = Math.max(...[defaultGraphMaxX, snowballGraphMaxX, avalanceGraphMaxX]);
+
+    const minYValue = Math.min(...[defaultGraphMinY, snowballGraphMinY, avalanceGraphMinY]);
+    const maxYValue = Math.max(...[defaultGraphMaxY, snowballGraphMaxY, avalanceGraphMaxY]);
+
+    this.defaultGraphData = this.graphService.buildGraphData(this.defaultGraphData, this.defaultGraphData.balances[0], minXValue, maxXValue, minYValue, maxYValue);
+    this.snowballGraphData = this.graphService.buildGraphData(this.snowballGraphData, this.snowballGraphData.balances[0], minXValue, maxXValue, minYValue, maxYValue);
+    this.avalanceGraphData = this.graphService.buildGraphData(this.avalanceGraphData, this.avalanceGraphData.balances[0], minXValue, maxXValue, minYValue, maxYValue);
   }
 }
